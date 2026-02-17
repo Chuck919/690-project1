@@ -1,0 +1,434 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.19514987433163253 -0.1972879464615676 0.960725763539901 4.6832377984312386
+  position 0.23994465882834407 4.176165439864012 2.2014134783973405
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  translation 0 -1 0
+  size 0.75 5
+}
+DEF back Solid {
+  translation 0 -1.501 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(14)"
+}
+DEF back Solid {
+  translation 0 -2.251 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(15)"
+}
+DEF back Solid {
+  translation 0 -3.001 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(16)"
+}
+DEF red Solid {
+  translation 0.25 0 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(8)"
+}
+DEF red Solid {
+  translation 0.25 -3 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(23)"
+}
+DEF red Solid {
+  translation -0.125 -0.75 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(6)"
+}
+DEF red Solid {
+  translation -0.125 -2.25 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(18)"
+}
+DEF red Solid {
+  translation -0.25 0 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(7)"
+}
+DEF red Solid {
+  translation -0.855488 0.370685 -1.86767e-15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(27)"
+}
+DEF red Solid {
+  translation -0.25 -3 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(22)"
+}
+Solid {
+  translation -0.395 -0.999 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry DEF second Box {
+        size 0.05 5.1 0.1
+      }
+    }
+  ]
+  name "solid(3)"
+  boundingObject USE second
+}
+Solid {
+  translation 0.003 1.526 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry DEF first Box {
+        size 0.745 0.05 0.1
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE first
+}
+Solid {
+  translation 0.0024 -3.524 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry USE first
+    }
+  ]
+  boundingObject USE first
+}
+Solid {
+  translation 0.4 -0.999 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry USE second
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE second
+}
+E-puck {
+  translation 0.004491 1.43425 -6.44061e-05
+  rotation 0 0 1 -1.5707953071795862
+  controller "base_controller"
+}
+DEF red Solid {
+  translation 0.125 0.75 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(4)"
+}
+DEF red Solid {
+  translation -0.126441 1.01317 1.27353e-14
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(24)"
+}
+DEF red Solid {
+  translation 0.125 -1.5 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(20)"
+}
+DEF green Solid {
+  translation 0.244038 1.0142 1.25128e-14
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(5)"
+}
+DEF green Solid {
+  translation -0.243232 0.749897 -9.50627e-15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(25)"
+}
+DEF green Solid {
+  translation -0.25 -1.5 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(19)"
+}
+DEF back Solid {
+  translation 0.00849419 1.00385 3.55204e-15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(11)"
+}
+DEF back Solid {
+  translation 0.0120389 0.743301 2.3106e-15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(26)"
+}
+DEF back Solid {
+  translation 0 -0.001 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(12)"
+}
+DEF back Solid {
+  translation 0 -0.751 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.001 0.1
+      }
+    }
+  ]
+  name "solid(13)"
+}
+DEF green Solid {
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(9)"
+}
+DEF green Solid {
+  translation 0 -3 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(21)"
+}
+DEF green Solid {
+  translation 0.25 -0.75 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(10)"
+}
+DEF green Solid {
+  translation 0.25 -2.25 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.25 0.001 0.1
+      }
+    }
+  ]
+  name "solid(17)"
+}
