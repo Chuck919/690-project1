@@ -110,7 +110,8 @@ while robot.step(timestep) != -1:
     front_dist = max(ps_values[0], ps_values[7])
     left_side = ps_values[5]
     right_side = ps_values[2]
-    
+    print("Left" ,left_side)
+    print("Right", right_side)
     # -----------------------------
     # DETECT WALL PASSAGE
     # -----------------------------
@@ -186,7 +187,7 @@ while robot.step(timestep) != -1:
     # GREEN CENTERED - GO THROUGH (Priority 3)
     # -----------------------------
     elif green_center > 20:
-        # Green is centered - blast through!
+        # Green is centered
         left_speed = 0.96 * MAX_SPEED
         right_speed = 0.96 * MAX_SPEED
     
@@ -231,17 +232,21 @@ while robot.step(timestep) != -1:
     # -----------------------------
     # EMERGENCY SIDE WALL AVOIDANCE
     # -----------------------------
-    if left_side > 90 and not scan_mode and forward_after_wall_counter == 0:
+
+    if left_side > 200 and not scan_mode and forward_after_wall_counter == 0 and total_red == 0:
         # Too close to left wall - correct right
         left_speed = 0.95 * MAX_SPEED
         right_speed = 0.50 * MAX_SPEED
         straighten_counter = 15
+        print("Left wall avoidance enabled")
         
-    elif right_side > 90 and not scan_mode and forward_after_wall_counter == 0:
+    elif right_side > 200 and not scan_mode and forward_after_wall_counter == 0 and total_red == 0:
         # Too close to right wall - correct left
         left_speed = 0.50 * MAX_SPEED
         right_speed = 0.95 * MAX_SPEED
         straighten_counter = 15
+        print("Right wall avoidance enabled")
+
     
     # -----------------------------
     # APPLY SPEEDS
@@ -254,4 +259,4 @@ while robot.step(timestep) != -1:
     right_motor.setVelocity(right_speed)
     
     # Debug (uncomment to see what's happening)
-    # print(f"TG:{total_green:3} GL:{green_left:3} GC:{green_center:3} GR:{green_right:3} | FWD:{forward_after_wall_counter:2} | Scan:{scan_mode}")
+    print(f"TG:{total_green:3} GL:{green_left:3} GC:{green_center:3} GR:{green_right:3} | FWD:{forward_after_wall_counter:2} | Scan:{scan_mode}")
