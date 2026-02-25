@@ -7,7 +7,7 @@ left_motor = robot.getDevice('left wheel motor')
 right_motor = robot.getDevice('right wheel motor')
 left_motor.setPosition(float('inf'))
 right_motor.setPosition(float('inf'))
-MAX_SPEED = 6.28
+MAX_SPEED = 6.28  # keep at motor's maxVelocity
 
 camera = robot.getDevice('camera')
 camera.enable(timestep)
@@ -50,8 +50,7 @@ COMMIT_NEAR_G = 3
 CLEAR_STEPS = 40
 COMMIT_STEPS = 80
 SCAN_DELAY = 20
-WALL_K = 0.0012
-WALL_HARD = 200
+WALL_K = 0.0015  # slightly stronger wall correction
 
 ALIGN_TIMEOUT = 25
 CREEP_STEPS = 12
@@ -168,11 +167,8 @@ while robot.step(timestep) != -1:
     elif state == CLEAR_WALL:
         clear_counter -= 1
         if clear_counter <= 0:
-            if has_g:
-                state = APPROACH
-            else:
-                state = SCAN
-                scan_counter = 0
+            state = SCAN
+            scan_counter = 0
 
     elif state == ALIGN:
         align_counter -= 1
@@ -184,24 +180,20 @@ while robot.step(timestep) != -1:
 
     elif state == SCAN:
         scan_counter += 1
-
         if has_r:
             scan_saw_red = True
 
-        # Allow green reacquisition (no near_g restriction)
-        if scan_counter > SCAN_MIN_BEFORE_EXIT and has_g:
+        # If green detected but small (thin wall), only approach if not boxed in
+        moderate_green = (n_green >= GREEN_THRESH)
+        boxed_in = front_l > STUCK_SENSOR and front_r > STUCK_SENSOR
+        if scan_counter > SCAN_MIN_BEFORE_EXIT and moderate_green and not boxed_in:
             state = APPROACH
             scan_counter = 0
             scan_saw_red = False
-
         elif scan_counter > SCAN_LEFT + SCAN_SWEEP + SCAN_360:
-            if scan_saw_red:
-                reverse_counter = REVERSE_FRAMES
-            else:
-                state = CRUISE
-                creep_counter = CREEP_STEPS
-            scan_saw_red = False
+            reverse_counter = REVERSE_FRAMES
             scan_counter = 0
+            scan_saw_red = False
             peak_color = 0
 
     # ── Motor control ───────────────────────────────────
@@ -210,23 +202,18 @@ while robot.step(timestep) != -1:
 
     if state == CRUISE:
         base = MAX_SPEED
-
     elif state == APPROACH:
-        base = max(0.50, 0.80 - fill * 3.0) * MAX_SPEED
-
+        base = max(0.50, 0.85 - fill * 3.0) * MAX_SPEED
         if has_g:
             err = gcx
             d_err = (err - prev_error) if prev_had_green else 0.0
             steer = (Kp * err + Kd * d_err) * 0.55 * MAX_SPEED
             steer = max(-0.55 * MAX_SPEED, min(0.55 * MAX_SPEED, steer))
             prev_error = err
-
     elif state == COMMIT:
         base = 0.90 * MAX_SPEED
-
     elif state == CLEAR_WALL:
-        base = 0.60 * MAX_SPEED
-
+        base = 0.65 * MAX_SPEED
     elif state == SCAN:
         base = 0.0
         if scan_counter <= SCAN_LEFT:
