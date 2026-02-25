@@ -35,18 +35,18 @@ scan_direction = 1
 peak_color = 0
 
 # ── Tuning parameters ───────────────────────────────────
-Kp = 2.2
-Kd = 0.8
+Kp = 2.5
+Kd = 0.9
 Kp_commit = 0.8
 RED_AVOID_K = 1.8
 GREEN_THRESH = 3
 RED_THRESH = 5
-COMMIT_CX = 0.20
-COMMIT_NEAR_G = 3
-CLEAR_STEPS = 5
-COMMIT_STEPS = 15
-SCAN_DELAY = 20
-SCAN_360 = 75
+COMMIT_CX = 0.25
+COMMIT_NEAR_G = 2
+CLEAR_STEPS = 3
+COMMIT_STEPS = 12
+SCAN_DELAY = 12
+SCAN_360 = 55
 WALL_K = 0.0012
 WALL_HARD = 200
 
@@ -54,7 +54,7 @@ WALL_HARD = 200
 def analyze_camera():
     """Per-pixel weighted centroid for green and red regions."""
     image = camera.getImage()
-    y0 = H // 4
+    y0 = H // 6
 
     g_xw = 0.0; g_wt = 0.0; n_g = 0
     r_xw = 0.0; r_wt = 0.0; n_r = 0
@@ -153,9 +153,7 @@ while robot.step(timestep) != -1:
 
     elif state == SCAN:
         scan_counter += 1
-        # Ignore first 15 frames (~100° of rotation) so we turn away
-        # from the wall behind us before we start looking for green
-        if scan_counter > 15 and has_g:
+        if scan_counter > 10 and has_g:
             # Found green -- head toward it
             state = APPROACH
             peak_color = total_color
@@ -169,43 +167,40 @@ while robot.step(timestep) != -1:
     steer = 0.0
 
     if state == CRUISE:
-        base = 0.90 * MAX_SPEED
+        base = MAX_SPEED
 
     elif state == APPROACH:
-        base = max(0.35, 0.70 - fill * 3.0) * MAX_SPEED
+        base = max(0.45, 0.75 - fill * 3.0) * MAX_SPEED
 
         if has_g and abs(gcx) < 0.15:
-            base = max(base, 0.60 * MAX_SPEED)
-        elif has_g and abs(gcx) > 0.4:
-            base *= 0.80
+            base = max(base, 0.75 * MAX_SPEED)
+        elif has_g and abs(gcx) > 0.35:
+            base *= 0.65
 
         if has_g:
             err = gcx
             d_err = (err - prev_error) if prev_had_green else 0.0
             sf = Kp * err + Kd * d_err
             sf = max(-1.0, min(1.0, sf))
-            steer = sf * 0.50 * MAX_SPEED
+            steer = sf * 0.55 * MAX_SPEED
             prev_error = err
         elif no_green_frames < 5:
-            # Green just disappeared (very close to wall) -- hold heading
-            base = 0.55 * MAX_SPEED
+            base = 0.60 * MAX_SPEED
             steer = 0.0
         elif has_r:
-            steer = -RED_AVOID_K * rcx * 0.40 * MAX_SPEED
-            steer = max(-0.50 * MAX_SPEED, min(0.50 * MAX_SPEED, steer))
+            steer = -RED_AVOID_K * rcx * 0.45 * MAX_SPEED
+            steer = max(-0.55 * MAX_SPEED, min(0.55 * MAX_SPEED, steer))
 
     elif state == COMMIT:
-        base = 0.70 * MAX_SPEED
-        # Zero steering -- drive perfectly straight, no scanning
+        base = 0.85 * MAX_SPEED
 
     elif state == CLEAR_WALL:
         base = 0.0
         steer = 0.0
 
     elif state == SCAN:
-        # Pure in-place rotation -- zero forward speed
         base = 0.0
-        steer = scan_direction * 0.40 * MAX_SPEED
+        steer = scan_direction * 0.55 * MAX_SPEED
 
     # ── Side-wall centering (gentle, always-on except COMMIT/SCAN) ─
     if state not in (COMMIT, SCAN, CLEAR_WALL):
