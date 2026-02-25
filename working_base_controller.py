@@ -31,24 +31,26 @@ no_green_frames = 0
 clear_counter = 0
 commit_counter = 0
 scan_counter = 0
-scan_direction = 1
 peak_color = 0
 
 # ── Tuning parameters ───────────────────────────────────
 Kp = 2.5
 Kd = 0.9
-Kp_commit = 0.8
 RED_AVOID_K = 1.8
 GREEN_THRESH = 3
 RED_THRESH = 5
-COMMIT_CX = 0.25
-COMMIT_NEAR_G = 2
+COMMIT_CX = 0.20
+COMMIT_NEAR_G = 3
 CLEAR_STEPS = 3
-COMMIT_STEPS = 12
-SCAN_DELAY = 12
-SCAN_360 = 55
+COMMIT_STEPS = 15
+SCAN_DELAY = 20
 WALL_K = 0.0012
 WALL_HARD = 200
+
+# Scan geometry (~10°/frame at 0.50 scan speed)
+SCAN_LEFT = 10       # frames to turn left ~90°
+SCAN_SWEEP = 52      # frames to sweep right ~360° from leftmost position
+SCAN_SPEED = 0.50
 
 
 def analyze_camera():
@@ -120,16 +122,13 @@ while robot.step(timestep) != -1:
             commit_counter = COMMIT_STEPS
         elif no_green_frames > SCAN_DELAY and not has_r:
             if peak_color > 15:
-                # Was near a wall -- green vanished at close range, push through
                 state = COMMIT
                 commit_counter = COMMIT_STEPS
             else:
-                # Genuinely lost, no wall nearby -- stop and scan
                 state = SCAN
                 scan_counter = 0
 
     elif state == COMMIT:
-        # Ignore the camera entirely -- just drive straight through
         commit_counter -= 1
         if commit_counter <= 0:
             state = CLEAR_WALL
@@ -137,28 +136,22 @@ while robot.step(timestep) != -1:
             peak_color = 0
 
     elif state == CLEAR_WALL:
-        # FULL STOP -- then check if next wall is already visible
         clear_counter -= 1
         if clear_counter <= 0:
             if has_g:
-                # Next wall's green already visible ahead -- skip scan
                 state = APPROACH
                 peak_color = total_color
             else:
-                # Nothing ahead -- rotate to find green
                 state = SCAN
                 scan_counter = 0
-                scan_direction *= -1
                 peak_color = 0
 
     elif state == SCAN:
         scan_counter += 1
-        if scan_counter > 10 and has_g:
-            # Found green -- head toward it
+        if scan_counter > SCAN_LEFT and has_g:
             state = APPROACH
             peak_color = total_color
-        elif scan_counter > SCAN_360:
-            # Full 360 done, no green found -- drive forward a bit
+        elif scan_counter > SCAN_LEFT + SCAN_SWEEP:
             state = CRUISE
             peak_color = 0
 
@@ -170,12 +163,12 @@ while robot.step(timestep) != -1:
         base = MAX_SPEED
 
     elif state == APPROACH:
-        base = max(0.45, 0.75 - fill * 3.0) * MAX_SPEED
+        base = max(0.40, 0.75 - fill * 3.0) * MAX_SPEED
 
         if has_g and abs(gcx) < 0.15:
-            base = max(base, 0.75 * MAX_SPEED)
+            base = max(base, 0.70 * MAX_SPEED)
         elif has_g and abs(gcx) > 0.35:
-            base *= 0.65
+            base *= 0.60
 
         if has_g:
             err = gcx
@@ -185,14 +178,14 @@ while robot.step(timestep) != -1:
             steer = sf * 0.55 * MAX_SPEED
             prev_error = err
         elif no_green_frames < 5:
-            base = 0.60 * MAX_SPEED
+            base = 0.55 * MAX_SPEED
             steer = 0.0
         elif has_r:
             steer = -RED_AVOID_K * rcx * 0.45 * MAX_SPEED
             steer = max(-0.55 * MAX_SPEED, min(0.55 * MAX_SPEED, steer))
 
     elif state == COMMIT:
-        base = 0.85 * MAX_SPEED
+        base = 0.80 * MAX_SPEED
 
     elif state == CLEAR_WALL:
         base = 0.0
@@ -200,7 +193,10 @@ while robot.step(timestep) != -1:
 
     elif state == SCAN:
         base = 0.0
-        steer = scan_direction * 0.55 * MAX_SPEED
+        if scan_counter <= SCAN_LEFT:
+            steer = -SCAN_SPEED * MAX_SPEED
+        else:
+            steer = SCAN_SPEED * MAX_SPEED
 
     # ── Side-wall centering (gentle, always-on except COMMIT/SCAN) ─
     if state not in (COMMIT, SCAN, CLEAR_WALL):
@@ -227,5 +223,5 @@ while robot.step(timestep) != -1:
 
     print(
         f"{STATE_NAMES[state]:7} gcx:{gcx:+.2f} G:{n_green:3} R:{n_red:3} "
-        f"fill:{fill:.3f} L:{left_w:.0f} R:{right_w:.0f}"
+        f"fill:{fill:.3f} nrG:{near_g:3} sc:{scan_counter:3}"
     )
