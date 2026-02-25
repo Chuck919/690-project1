@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.19514987433163253 -0.1972879464615676 0.960725763539901 4.6832377984312386
-  position 0.23994465882834407 4.176165439864012 2.2014134783973405
+  orientation -0.22465207993337996 -0.19342693545581935 0.9550484090462518 4.5179887342485845
+  position 0.22465210813527012 3.225015335835499 1.1342298614592932
 }
 TexturedBackground {
 }
@@ -223,12 +223,31 @@ Solid {
   boundingObject USE second
 }
 E-puck {
-  translation 0.004491 1.43425 -6.44061e-05
-  rotation 0 0 1 -1.5707953071795862
+  hidden position_0_0 457.70528169601744
+  hidden position_0_1 462.8143564809117
+  hidden rotation_1 0 1 0 5.31593957908721
+  hidden rotation_2 0 -1 0 2.141356250377673
+  translation 0.01877201600778653 1.4639768311395942 -0.00012223433777685394
+  rotation -4.27426e-07 -1.08489e-07 -1 1.54863
   controller "base_controller"
 }
 DEF red Solid {
-  translation 0.125 0.75 0
+  translation -0.005 0.75 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.6 0.001 0.1
+      }
+    }
+  ]
+  name "solid(4)"
+}
+DEF red Solid {
+  translation 0.065 0.7445 0
   children [
     Shape {
       appearance PBRAppearance {
@@ -240,10 +259,10 @@ DEF red Solid {
       }
     }
   ]
-  name "solid(4)"
+  name "solid(29)"
 }
 DEF red Solid {
-  translation -0.126441 1.01317 1.27353e-14
+  translation 0.053559 1.01317 1.27353e-14
   children [
     Shape {
       appearance PBRAppearance {
@@ -256,6 +275,22 @@ DEF red Solid {
     }
   ]
   name "solid(24)"
+}
+DEF red Solid {
+  translation -0.236441 1.01317 1.27353e-14
+  rotation -1 0 0 -5.307179586466759e-06
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.5 0.001 0.1
+      }
+    }
+  ]
+  name "solid(28)"
 }
 DEF red Solid {
   translation 0.125 -1.5 0
@@ -273,7 +308,7 @@ DEF red Solid {
   name "solid(20)"
 }
 DEF green Solid {
-  translation 0.244038 1.0142 1.25128e-14
+  translation 0.354038 1.0142 1.25128e-14
   children [
     Shape {
       appearance PBRAppearance {
@@ -281,14 +316,14 @@ DEF green Solid {
         metalness 0
       }
       geometry Box {
-        size 0.25 0.001 0.1
+        size 0.1 0.001 0.1
       }
     }
   ]
   name "solid(5)"
 }
 DEF green Solid {
-  translation -0.243232 0.749897 -9.50627e-15
+  translation -0.353232 0.744 -9.50627e-15
   children [
     Shape {
       appearance PBRAppearance {
@@ -296,7 +331,7 @@ DEF green Solid {
         metalness 0
       }
       geometry Box {
-        size 0.25 0.001 0.1
+        size 0.1 0.001 0.1
       }
     }
   ]
